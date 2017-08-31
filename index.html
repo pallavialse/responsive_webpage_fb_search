@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="index.css">
+    
+        
+   
+    </head>
+    
+    <body ng-app="myApp" ng-controller="dataCtrl">
+        <script type="text/javascript" src="index.js"></script>
+        <script>
+	       window.fbAsyncInit = function() {
+	           FB.init({
+	               appId      : '227713354364290',
+	               xfbml      : true,
+	               version    : 'v2.8'
+	           });
+	           FB.AppEvents.logPageView();
+	       };
+	
+	       (function(d, s, id){
+	           var js, fjs = d.getElementsByTagName(s)[0];
+	           if (d.getElementById(id)) {return;}
+	           js = d.createElement(s); js.id = id;
+	           js.src = "//connect.facebook.net/en_US/sdk.js";
+	           fjs.parentNode.insertBefore(js, fjs);
+	       }(document, 'script', 'facebook-jssdk'));
+        </script>
+        <div class="container-fluid">
+	       <nav class="navbar navbar-inverse formbar row">
+  		    <div class="col-sm-3 col-xs-12 float_left">
+      		    <span class="navbar-brand " >Fb Search</span>
+    	   </div>
+               <div class="">
+    	           <form ng-submit="submit_func()" id="form1" class="navbar-form navbar-left">
+                        <div class="row">
+    	                   <div class="col-sm-7 col-xs-8">
+      		                    <div class="input-group grp float_left">
+        		                  <input type="text" class="form-control" placeholder="type something.." id="ip" required>
+       				             <div class="input-group-btn">
+                                     <input id="submit_handle" type="submit" style="display: none">
+          				              <button class="btn btn-default search-btn" type="submit" id='s_but'>
+            				            <i class="glyphicon glyphicon-search"></i>
+          				              </button>
+                                     
+        			             </div>
+      		                    </div>
+                        </div>
+            <div class="col-sm-2 col-xs-4 float_right">
+       		   <button class="btn btn-default" id="c_but">Clear</button>
+            </div>
+       	    </div>
+    	   </form>
+            </div>
+	       </nav>
+<!--
+        <form id = "fb_search">
+        Facebook Search
+        <input id='ip' type="text" value="" required=true>
+        <input type=button id='s_but' value='Search'>
+        <input type="button" id='c_but' value="Clear" >
+        </form>
+-->
+            <ul class="nav nav-pills nav-justified myblue">
+                <li class="active tablinks"><a data-toggle="pill" value='user' class="tablinks">Users</a></li>
+                <li class="tablinks"><a data-toggle="pill" value='page' class="tablinks">Pages</a></li>
+                <li class="tablinks"><a data-toggle="pill" value='event' class="tablinks">Events</a></li>
+                <li><a data-toggle="pill" value='place' id="placetab">Places </a></li>
+                <li class="tablinks"><a data-toggle="pill" value='group' class="tablinks">Groups</a></li>
+                <li><a data-toggle="pill" value='favorite' id="favtab">Favorites</a></li>  
+            </ul>
+        
+<!--
+<div class="tab">
+  <button class="tablinks" value=user>Users</button>
+  <button class="tablinks" value=page>Pages</button>
+  <button class="tablinks" value=event>Events</button>
+    <button id="placetab" value=place>Places</button>
+  <button class="tablinks" value=group>Groups</button>
+  <button id="favtab" value=favorite>Favorites</button>
+</div>
+-->
+        <p id=sample></p>
+        <p id=sample2></p>
+    
+        <div >
+             <div class="progress myprogressbar" hidden="true">
+			     <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%">
+			     </div>
+            </div>
+            <div class="table-responsive" id="main_page_div" hidden>
+            <table class="table table-hover" id='my_table' >
+                <thead>
+                    <tr id='header_row' hidden="true"><th> # </th><th> Profile photo </th><th> Name </th><th> Favorite </th><th> Details </th></tr>
+                </thead>
+                <tbody>
+                    <tr id='normal_row' ng-repeat="x in names">
+                    <td>{{$index + 1}}</td>
+                    <td><a ng-href='{{ x.url }}' target=_blank><img class="img-circle" ng-src = '{{ x.url }}' width=30 height=30></a></td>
+                    <td>{{ x.name }}</td>
+                        <td><button type="button" class="btn btn-default" ng-class="key_found(x.id)?'star glyphicon glyphicon-star':'star glyphicon glyphicon-star-empty'" ng-click="star_clicked($event,x.id,x.name,x.url)"></button></td>
+                    <td><button ng-click="show_details($index,x.id,x.name,x.url)" type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+                    </td>
+                    </tr>
+                </tbody>
+            </table>
+                <div class="row">
+                    <div class="col-xs-6">
+                    <button hidden type="button" class="btn btn-default float_right" id="prev_but" >Previous</button>
+                    </div>
+                    <div class="col-xs-6">
+                    <button hidden type="button" class="btn btn-default float_left" id="next_but" >Next</button>
+                    </div>
+                </div>
+            </div>
+            <div id="details_div">
+                <div class="row " id='detail_header_row' hidden='true'>
+                    <div class="col-xs-6">
+                        <button type="button" class="btn btn-default btn-sm" ng_click='show_mainPage()'>
+                            <span class="glyphicon glyphicon-chevron-left"></span> Back
+                        </button>
+                    
+                    </div>
+                    <div class="col-xs-3">
+                    <button type="button" class="btn btn-default" ng-class="key_found_noId()?'star glyphicon glyphicon-star':'star glyphicon glyphicon-star-empty'" ng-click="star_clicked_noId($event)"></button>
+                    </div>
+                    <div class="col-xs-3"> 
+                    <button  type="button" class="btn btn-default" ng-click="fb_post()"><img id="facebook_icon" src="facebook_icon.png"></button>
+                    </div>
+                </div>
+            <div class="row" id='albums_and_posts' hidden=true>
+            <div class="panel panel-default col-sm-6">
+            <div class="panel-heading">Albums</div>
+            <div class="panel-body">
+                 <div class="progress" id="albprogressbar" hidden="true">
+			         <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%">
+			         </div>
+                </div>
+                <div id="album_well" class="well" hidden>
+                No data found
+                </div>
+            <div class="panel-group" id="accordion">
+            <div  ng-repeat="album in albums" class="panel panel-default">
+            
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="{{ '#collapse'+$index }}">{{ album.name }}</a>
+                        </h4>
+                    </div>
+                    <div id="{{ 'collapse'+$index }}" class="panel-collapse collapse ">
+                        <div class="panel-body">   
+                          
+                            <div ng-repeat="photos in album.photos">
+                                <img class="img-rounded img-responsive img-helper" ng-src = '{{ photos.picture }}' width=500 height=350 />
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            </div>
+            </div>
+            </div>
+                
+            <div class="panel panel-default col-sm-6">
+            <div class="panel-heading">Posts</div>
+            <div class="panel-body">
+                <div class="progress" id="postprogressbar" hidden="true">
+			         <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%">
+			         </div>
+                </div>
+                <div id="post_well" class="well" hidden>
+                No data found
+                </div>
+            
+            <div ng-repeat="x in posts">
+                <div class="panel panel-default">
+                    
+                    <div class="panel-body postClass">  
+                        <div><img id='postPhoto' ng-src = '{{ profile_pic }}'width=40 height=30></div>
+                        <div><b> {{ profile_name }} </b></div>
+                        <div>{{ x.created_time.date}}</div>
+                        <div>{{ x.message }}</div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+            
+            
+            
+            </div>
+            </div>
+          
+            <div class=fav_details>
+            <table class="table table-hover" id='fav_table'>
+                <thead>
+                    <tr id='header_row_fav' hidden="true"><th> # </th><th> Profile photo </th><th> Name </th><th> Type </th><th> Favorite </th><th> Details </th></tr>
+                </thead>
+                <tbody>
+                    <tr id='normal_row_fav' ng-repeat="x in favs">
+                    <td>{{$index + 1}}</td>
+                    <td><a ng-href='{{ x.url }}' target=_blank><img class="img-circle" ng-src = '{{ x.url }}' width=40 height=30></a></td>
+                    <td>{{ x.name }}</td>
+                    <td>{{ x.type }}</td>
+                    <td><button type="button" class="btn btn-default btn-sm"
+                                ng-click="remove_fav(x.id,$index)">
+                        <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </td>
+                    <td>
+                        <button ng-click="show_details($index,x.id,x.name,x.url)" type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+                    <td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            
+            
+        </div>
+    </div>
+    
+</body>
+</html>

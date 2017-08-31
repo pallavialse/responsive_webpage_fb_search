@@ -1,0 +1,70 @@
+        .img-circle{
+            border-radius: 50% !important;
+        }
+        .img-helper{
+            border-radius: 10px !important;
+        }
+
+        .well{
+            background-color: bisque !important;
+        }
+
+        #facebook_icon{
+            height: 20px !important;
+            width: 20px !important;
+        }
+
+        .myprogressbar{
+            margin-top: 25%;
+        }
+        .star {
+            font-size: 15px;
+            color: gold !important;
+        }
+        
+        .glyphicon-star-empty{
+            color: black !important;
+        }
+        .glyphicon-star{
+            font-size: 15px;
+            color: gold !important;
+        }
+        .formbar{
+    	   background-color: #fafafa !important;
+            border-color: white !important;
+            margin-bottom : 0 !important;
+        }
+        .search-btn {
+    	   background-color: #141488 !important;
+            color:white !important;
+	   }
+        .float_left{
+            float: left;
+        }
+        .float_right{
+            float: right;
+        }
+         #clear{
+		
+    	   color: #141488 !important;
+            border-color: #141488 !important;
+        }
+        .navbar-brand{
+    	   color: #141488 !important;
+        }
+
+        *{
+    	   border-radius: 0 !important;
+            -moz-border-radius : 0 !important;
+        }
+        .myblue{
+            border-bottom-style: solid !important;
+            border-bottom-color: #141488 !important;
+        }
+        .myblue li.active a{
+            background-color: #141488 !important;
+        }
+        .myblue a:hover{
+            background-color: transparent !important;
+        }
+   
